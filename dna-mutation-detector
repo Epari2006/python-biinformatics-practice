@@ -1,0 +1,46 @@
+def detect_mutations(reference, sample):
+    mutations = []
+    min_len = min(len(reference), len(sample))
+
+    # Compare base by base
+    for i in range(min_len):
+        if reference[i] != sample[i]:
+            mutations.append({
+                "position": i+1,
+                "reference": reference[i],
+                "sample": sample[i],
+                "type": "substitution"
+            })
+
+    # Handle insertions
+    if len(sample) > len(reference):
+        for i in range(len(reference), len(sample)):
+            mutations.append({
+                "position": i+1,
+                "reference": "-",
+                "sample": sample[i],
+                "type": "insertion"
+            })
+
+    # Handle deletions
+    if len(reference) > len(sample):
+        for i in range(len(sample), len(reference)):
+            mutations.append({
+                "position": i+1,
+                "reference": reference[i],
+                "sample": "-",
+                "type": "deletion"
+            })
+
+    return mutations
+
+
+# Example usage
+ref_seq = "ATCGTACGGA"
+sample_seq = "ATGGTACGA"
+
+mutations = detect_mutations(ref_seq, sample_seq)
+
+print("Detected mutations:")
+for m in mutations:
+    print(m)
